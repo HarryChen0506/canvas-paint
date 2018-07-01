@@ -40,15 +40,25 @@
     <div class="canvas-wrap">
       <canvas id="paint" width="800px" height="400px" style="border: 1px solid red"></canvas>  
     </div>
-    <div class="control-wrap"></div>
+    <div class="control-wrap">
+      <button id="eraser">橡皮擦</button>
+    </div>
   </div>
   
 <script>
   // canvas 变量
   let penColor = "#000" // 默认笔的颜色
   let penWeight = 2 // 笔的宽度
+  let isEraser = false
   const canvas = document.getElementById("paint")
   const ctx = canvas.getContext('2d')
+  const eraserButton = document.getElementById('eraser')
+  // 切换橡皮擦
+  eraserButton.addEventListener('click', function (e) {    
+    isEraser = !isEraser
+    console.log('button', isEraser)
+    eraserButton.innerHTML = isEraser ? '橡皮擦使用中...' : '橡皮擦'
+  })
 
    // 计算canvas盒子尺寸
    function getRect(container) {
@@ -61,7 +71,6 @@
        offsetTop: el.offsetTop,
      }
    }
-   console.log(getRect('paint'))
    var canvasRect = getRect('paint')
 
   // 绘制线条
@@ -80,36 +89,46 @@
     }
   }
 
-  // var line = new Line(ctx)
-  // line.start(0, 0)
-  // line.lineTo(100, 100)
-  // line.lineTo(200, 100)
-  // line.lineTo(200, 200)
-
-  // var two = new Line(ctx)
-  // line.start(400, 200)
-  // line.lineTo(400, 250)
-  // line.lineTo(450, 250)
+  // 橡皮擦
+  function Eraser (ctx) {
+    this.type = 'eraser'
+    this.ctx = ctx
+  }
+  Eraser.prototype = {
+    clear: function (x, y, width, height) {
+      this.ctx.clearRect(x, y, width, height)
+    }
+  }
 
   // canvas 绑定事件
   let canPaint = false
   let line = new Line(ctx)
+  let eraser = new Eraser(ctx)
   canvas.onmousedown = function (e) {
     console.log('e', e)
     // 起始点
     var start_x = e.pageX - canvasRect.offsetLeft
     var start_y = e.pageY - canvasRect.offsetTop
-    console.log(start_x, start_y)
-    line.start(start_x, start_y)
+    // console.log(start_x, start_y)
+    if (!isEraser) {
+      line.start(start_x, start_y)
+    } else {
+      eraser.clear(start_x, start_y, 10, 10)
+    }    
     canPaint = true
   }
 
   canvas.onmousemove = function (e) {
     if (canPaint) {
-      console.log('move', e)
+      // console.log('move', e)
       var x = e.pageX - canvasRect.offsetLeft
       var y = e.pageY - canvasRect.offsetTop
-      line.lineTo(x, y)
+      if (!isEraser) {
+        line.lineTo(x, y)
+      } else {
+        eraser.clear(x, y, 10, 10)
+      }
+      
     }    
   }
 
