@@ -5,10 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>canvas 实现角度旋转</title>
+  <style>
+    .container {
+    }
+    .canvas-wrap {
+      margin: 100px auto;
+      display: flex;
+      justify-content:center;   
+    }
+  </style>
+  <script src="../utils/tool.js"></script>
 </head>
 <body>
+ <!-- canvas 实现旋转 -->  
+ <div class="container">
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="800px" height="400px" style="border: 1px solid red"></canvas>  
+    </div>
+  </div>
 
-  
+  <script>
+    // canvas 变量  
+  const canvas = document.getElementById("canvas")
+  const ctx = canvas.getContext('2d')
+  const arrow = new Arrow()
+  arrow.translate(200, 200).draw(ctx)
+  // console.log('center', arrow.getCenter())
+  const center = arrow.getCenter()
+
+  // 计算元素尺寸
+  function calRect (id) {
+    const el = document.getElementById(id)
+    return el.getBoundingClientRect()
+  }
+  // 计算鼠标位置在canvas
+  function calMousePoint (event, rect) {
+    return {
+      x: event.pageX - rect.left,
+      y: event.pageY - rect.top
+    }
+  }
+  // 计算角度
+  function calRotate (center, point) {
+    return Math.atan2(point.y - center.y, point.x - center.x)
+  }
+  // console.log(calRect('canvas'))
+  const rect = calRect('canvas')
+  canvas.onmousemove = function (e) {
+    // console.log('mouse', calMousePoint(e, rect))
+    ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    const rotate = calRotate(center, calMousePoint(e, rect))
+    // console.log('rotate', rotate)
+    arrow.rotate(rotate).draw(ctx)
+  }
+
+  </script>
   
 </body>
 </html>
