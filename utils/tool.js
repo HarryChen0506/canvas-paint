@@ -46,6 +46,8 @@ function Ball(radius, color) {
   this.radius = radius || 30
   this.x = 0
   this.y = 0
+  this.scaleX = 1
+  this.scaleY = 1
   this.color = color || '#f00'
 }
 Ball.prototype = {
@@ -54,11 +56,17 @@ Ball.prototype = {
     this.y = y
     return this
   },
+  scale: function (scaleX, scaleY) {
+    this.scaleX = scaleX
+    this.scaleY = scaleY
+    return this
+  },
   draw: function (context) {
     context.save()
     context.translate(this.x, this.y)
     context.lineWidth = 5
     context.fillStyle = this.color
+    context.scale(this.scaleX, this.scaleY)
     context.beginPath()
     context.arc(0, 0, this.radius, 0, Math.PI*2, false)
     context.closePath()

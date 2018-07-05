@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas 实现箭头跟随鼠标</title>
+  <style>
+    .container {
+    }
+    .canvas-wrap {
+      margin: 100px auto;
+      display: flex;
+      justify-content:center;   
+    }
+  </style>
+  <script src="../utils/tool.js"></script>
+</head>
+<body>
+ <!-- canvas 实现旋转 -->  
+ <div class="container">
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="800px" height="400px" style="border: 1px solid red"></canvas>  
+    </div>
+  </div>
+
+  <script>
+    // canvas 变量  
+  const canvas = document.getElementById("canvas")
+  const ctx = canvas.getContext('2d')
+  const arrow = new Arrow()
+  arrow.translate(200, 200).draw(ctx)
+  // console.log('center', arrow.getCenter())
+  const center = arrow.getCenter()
+  const speed = 5
+
+  // 计算元素尺寸
+  function calRect (id) {
+    const el = document.getElementById(id)
+    return el.getBoundingClientRect()
+  }
+  // 计算鼠标位置在canvas
+  function calMousePoint (event, rect) {
+    return {
+      x: event.pageX - rect.left,
+      y: event.pageY - rect.top
+    }
+  }
+  // 计算角度
+  function calRotate (center, point) {
+    return Math.atan2(point.y - center.y, point.x - center.x)
+  }
+  // console.log(calRect('canvas'))
+  const rect = calRect('canvas')
+  let mousePoint = {}
+  canvas.onmousemove = function (e) {
+    // console.log('mouse', calMousePoint(e, rect))
+    // ctx.clearRect(0, 0, canvas.width, canvas.height); 
+    // const rotate = calRotate(center, calMousePoint(e, rect))
+    // // console.log('rotate', rotate)
+    // arrow.rotate(rotate).draw(ctx)
+    mousePoint = calMousePoint(e, rect)
+  }
+  // 动画函数
+  function update () {
+    // console.log(123)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const rotate = calRotate(center, mousePoint) || 0
+    arrow.rotate(rotate)
+    // 移动x y 
+    arrow.x += speed * Math.cos(rotate)
+    arrow.y += speed * Math.sin(rotate)
+    arrow.draw(ctx)
+    requestAnimate()
+    // console.log('arrow', arrow)
+  }
+  // 请求动画
+  function requestAnimate() {
+    window.requestAnimationFrame(update)
+  }
+  requestAnimate()
+
+  </script>
+  
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>canvas 实现运动</title>
+  <title>canvas 实现重力小球</title>
   <style>
     .container {
     }
@@ -40,39 +40,36 @@
   let range = 100
   let radius = 50
   let startX = 200
-  let startY = 200
+  let startY = 100
   let scale = 1
   let centerX = 300
   let centerY = 300
   let circleRadius = 100
+  let ay = 0.1 // 重力加速度
+  let vy = 1 // y轴速度
+  let coefficient = 0.8
   const ball = new Ball(radius)
-  ball.translate(startX, startY)
+  ball.translate(startX, startY).scale(0.5, 0.5)
   // 动画函数
-  // function update () {
-    //   // console.log(123)
-    //   ctx.clearRect(0, 0, canvas.width, canvas.height)    
-    //   ball.x += speedX
-    //   if (ball.x > canvas.width +  radius) {
-    //     ball.x = -radius
-    //   }
-    //   ball.y = 200 + Math.sin(angle) * range    
-    //   ball.scaleX = ball.scaleY = 1 + Math.sin(angle) * 0.5
-      
-    //   ball.draw(ctx)
-    //   angle += speedY
-    //   // console.log('ball', ball)
-    //   requestAnimate()
-  // }
-
+  
   // 圆周运动
   function update () {
     // console.log(123)
-    ctx.clearRect(0, 0, canvas.width, canvas.height)  
-    ball.x = centerX + Math.cos(angle) * 100 
-    ball.y = centerY + Math.sin(angle) * 50 
+    ctx.clearRect(0, 0, canvas.width, canvas.height)    
+    vy += ay  
+    if (ball.y > canvas.height - (radius * 0.5)) {
+      vy = - vy * coefficient
+    }
+    if (vy < 0.001 && vy > -0.001 && (ball.y > canvas.height - radius * 0.5 - 10) && (ball.y < canvas.height - radius * 0.5 + 10) ) {
+      ball.y = canvas.height - radius * 0.5
+      vy = 0
+      ay = 0
+    } else {
+      ball.y += vy
+    }
     
     ball.draw(ctx)
-    angle += speedY
+    // angle += speedY
     // console.log('ball', ball)
     requestAnimate()
   }
