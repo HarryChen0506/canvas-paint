@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>canvas 实现角度旋转</title>
+  <title>canvas 实现运动</title>
   <style>
     .container {
     }
@@ -28,44 +28,34 @@
     // canvas 变量  
   const canvas = document.getElementById("canvas")
   const ctx = canvas.getContext('2d')
-  const arrow = new Arrow()
-  arrow.translate(200, 200).draw(ctx)
-  // console.log('center', arrow.getCenter())
-  const center = arrow.getCenter()
-
   // 计算元素尺寸
   function calRect (id) {
     const el = document.getElementById(id)
     return el.getBoundingClientRect()
   }
-  // 计算鼠标位置在canvas
-  function calMousePoint (event, rect) {
-    return {
-      x: event.pageX - rect.left,
-      y: event.pageY - rect.top
-    }
-  }
-  // 计算角度
-  function calRotate (center, point) {
-    return Math.atan2(point.y - center.y, point.x - center.x)
-  }
-  // console.log(calRect('canvas'))
-  const rect = calRect('canvas')
-  let mousePoint = {}
-  canvas.onmousemove = function (e) {
-    // console.log('mouse', calMousePoint(e, rect))
-    // ctx.clearRect(0, 0, canvas.width, canvas.height); 
-    // const rotate = calRotate(center, calMousePoint(e, rect))
-    // // console.log('rotate', rotate)
-    // arrow.rotate(rotate).draw(ctx)
-    mousePoint = calMousePoint(e, rect)
-  }
+  
+  let angle = 0
+  let speedX = 2
+  let speedY = 0.05
+  let range = 100
+  let radius = 50
+  let startX = 200
+  let startY = 200
+  const ball = new Ball(radius)
+  ball.translate(startX, startY)
   // 动画函数
   function update () {
     // console.log(123)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    const rotate = calRotate(center, mousePoint)
-    arrow.rotate(rotate).draw(ctx)
+    
+    ball.x += speedX
+    if (ball.x > canvas.width +  radius) {
+      ball.x = -radius
+    }
+    ball.y = 200 + Math.sin(angle) * range
+    angle += speedY
+    ball.draw(ctx)
+    // console.log('ball', ball)
     requestAnimate()
   }
   // 请求动画

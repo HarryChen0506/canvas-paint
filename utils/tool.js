@@ -5,7 +5,7 @@ function Arrow() {
   this.rotation = 0; //初始旋转角度 
   this.color = '#ffff00'; 
 } 
-//在原型上定义draw方法 
+// 箭头模型 
 Arrow.prototype.translate = function (x, y) {
   this.x = x;  //初始位置 
   this.y = y;
@@ -40,3 +40,31 @@ Arrow.prototype.draw = function(context){
   context.fill(); //填充 
   context.restore(); 
 } 
+
+// 小球模型
+function Ball(radius, color) {
+  this.radius = radius || 30
+  this.x = 0
+  this.y = 0
+  this.color = color || '#f00'
+}
+Ball.prototype = {
+  translate: function (x, y) {
+    this.x = x
+    this.y = y
+    return this
+  },
+  draw: function (context) {
+    context.save()
+    context.translate(this.x, this.y)
+    context.lineWidth = 5
+    context.fillStyle = this.color
+    context.beginPath()
+    context.arc(0, 0, this.radius, 0, Math.PI*2, false)
+    context.closePath()
+    context.stroke() //描边 
+    context.fill() //填充 
+    context.restore()
+    return this
+  }
+}
