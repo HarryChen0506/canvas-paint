@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas 绘制小球</title>
+  <style>
+      .container {
+      }
+      .canvas-wrap {
+        margin: 100px auto;
+        display: flex;
+        justify-content:center;   
+      }
+    </style>
+    <script src="../utils/tool.js"></script>
+</head>
+<body>
+  <!-- canvas 实现旋转 -->  
+  <div class="container">
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="800px" height="400px" style="border: 1px solid red"></canvas>  
+    </div>
+  </div>
+
+<script>
+  // canvas 实现运动的小球
+  const canvas = document.getElementById("canvas")
+  const ctx = canvas.getContext('2d')
+  const WIDTH = canvas.width
+  const HEIGHT = canvas.height
+
+  // const ball = new Ball(50, '#f00')
+  // ball.translate(100, 100).move(0.1, 0.1).draw(ctx)
+  // 收集所有的小球
+  const balls = []
+  createBall(20)
+  function createRandom (start, end) {
+    // 随机数 start 开始 end 结束
+    return start + Math.floor(Math.random() * (end - start + 1))
+  }
+  function createRandomDirection () {
+    // 随机数 -1 1
+    return Math.pow(-1, Math.floor(Math.random() * 1000))
+  }
+  function createBall (length) {
+    for (let i = 0; i< length; i++) {
+      const ball = new Ball(createRandom(20, 40), `rgb(${createRandom(0, 256)},${createRandom(0, 256)},${createRandom(0, 256)})`)
+      ball.translate(0.5 * WIDTH, HEIGHT).move(createRandomDirection() * 0.1 * createRandom(1,10), - 0.3 * createRandom(1,10))
+      balls.push(ball)
+    }
+  }
+  // 检测是否超出边界
+  function checkOut (ball) {
+    if (ball.x + ball.radius < 0 || ball.x - ball.radius > WIDTH || ball.y + ball.radius < 0 || ball.y - ball.radius > HEIGHT) {
+      return true
+    }
+    return false
+  }
+  function drawBalls () {
+    for (var i = 0; i < balls.length; i++) {
+      if (checkOut(balls[i])) {
+        balls[i].x = 0.5 * WIDTH
+        balls[i].y = HEIGHT
+      }
+      balls[i].x += balls[i].vx
+      balls[i].y += balls[i].vy
+      balls[i].draw(ctx)
+    }
+   
+  }
+  function clearCanvas () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+  }
+  function update () {
+    // console.log(123)
+    clearCanvas()
+    drawBalls()
+    requestAnimation()
+  }
+
+  function requestAnimation () {
+    window.requestAnimationFrame(update, 1000 / 60)
+  }
+
+  requestAnimation()
+
+
+</script>
+
+  
+</body>
+</html>

@@ -60,7 +60,7 @@
     if (ball.y > canvas.height - (radius * 0.5)) {
       vy = - vy * coefficient
     }
-    if (vy < 0.001 && vy > -0.001 && (ball.y > canvas.height - radius * 0.5 - 10) && (ball.y < canvas.height - radius * 0.5 + 10) ) {
+    if (vy < 0.001 && vy > -0.001 && (ball.y > canvas.height - radius * 0.5 - 2) && (ball.y < canvas.height - radius * 0.5 + 2) ) {
       ball.y = canvas.height - radius * 0.5
       vy = 0
       ay = 0
