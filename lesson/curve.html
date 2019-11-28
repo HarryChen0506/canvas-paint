@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>曲线的绘制</title>
+  <style>
+    .canvas-wrap {
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="800px" height="400px" style="border: 1px solid red"></canvas>
+    </div>
+  </div>
+</body>
+<script>
+  const canvas = document.getElementById('canvas')
+  const ctx = canvas.getContext('2d')
+  console.log('context', ctx)
+
+  // ctx.beginPath();
+  // ctx.moveTo(75, 25);
+  // ctx.quadraticCurveTo(25, 25, 25, 62.5);
+  // ctx.quadraticCurveTo(25, 100, 50, 100);
+  // ctx.quadraticCurveTo(50, 120, 30, 125);
+  // ctx.quadraticCurveTo(60, 120, 65, 100);
+  // ctx.quadraticCurveTo(125, 100, 125, 62.5);
+  // ctx.quadraticCurveTo(125, 25, 75, 25);
+  // ctx.stroke();
+
+  // ctx.shadowOffsetX = 2;
+  // ctx.shadowOffsetY = 2;
+  // ctx.shadowBlur = 5;
+  // ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+ 
+  // ctx.font = "20px Times New Roman";
+  // ctx.fillStyle = "Black";
+  // ctx.fillText("Sample String", 5, 30);
+
+  // ctx.beginPath(); 
+  // ctx.arc(50, 50, 30, 0, Math.PI*2, true);
+  // ctx.arc(50, 50, 15, 0, Math.PI*2, true);
+  // ctx.fill("evenodd");
+
+  ctx.font = "48px serif";
+  ctx.textAlign = 'center'
+  ctx.fillText("Hello world", 10, 50);
+  ctx.strokeText("Hello world", 10, 100);
+
+</script>
+
+</html>
